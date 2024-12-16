@@ -1,6 +1,15 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
+from .models import Note
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ["id", "title", "content", "created_at", "user"]
+        extra_kwargs = {"user": {"read_only": True}}
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
