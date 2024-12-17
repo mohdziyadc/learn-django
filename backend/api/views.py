@@ -3,7 +3,11 @@ from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from api.serializers import NoteSerializer, UserSerializer
-from backend.api.models import Note
+from api.models import Note
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -14,9 +18,11 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 
-class NoteListCreate(generics.ListAPIView):
+class NoteListCreate(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
     permission_classes = [IsAuthenticated]
+
+    logger.info("NoteListCreate Called!!")
 
     def get_queryset(self):
         user = self.request.user
@@ -27,3 +33,11 @@ class NoteListCreate(generics.ListAPIView):
             serializer.save(user=self.request.user)
         else:
             print(serializer.errors)
+
+
+class NoteDeleteView(generics.DestroyAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(user=self.request.user)
