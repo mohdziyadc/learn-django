@@ -7,6 +7,7 @@ function App() {
   return (
     <>
       <h2 className="text-5xl font-bold">If I still bleeeeeeed!</h2>
+      <h1>{import.meta.env.VITE_API_URL}</h1>
     </>
   );
 }
